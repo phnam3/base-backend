@@ -2,27 +2,26 @@ package com.example.basebackend.service;
 
 import com.example.basebackend.dto.TestDto;
 import com.example.basebackend.entities.TestEntity;
-import com.example.basebackend.repository.BaseRepository;
+import com.example.basebackend.repository.TestRepository;
 import com.example.basebackend.service.core.TestService;
-import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@Log4j2
+@Slf4j
 public class TestServiceImpl extends BaseServiceImpl<TestEntity, TestDto> implements TestService {
 
     @Autowired
-    public TestServiceImpl(BaseRepository<TestEntity> baseRepository) {
-        super(baseRepository);
+    public TestServiceImpl(TestRepository testRepository) {
+        super(testRepository);
     }
 
     @Override
     protected Logger getLogger() {
         return log;
     }
-
 
     @Override
     protected TestEntity createEntity(TestDto dto) {

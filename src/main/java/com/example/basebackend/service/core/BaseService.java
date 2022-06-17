@@ -8,30 +8,30 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
-public interface BaseService<T extends BaseDto> {
+public interface BaseService<dto extends BaseDto> {
     Long count();
 
     boolean existsById(Long id);
 
-    T getOne(Long id);
+    dto getOne(Long id);
 
-    Optional<T> findById(Long id);
+    Optional<dto> findById(Long id);
 
-    List<T> findAll();
+    List<dto> findAll();
 
-    List<T> findAllById(List<Long> id);
+    List<dto> findAllById(List<Long> id);
 
-    List<T> findAll(Sort sort);
+    List<dto> findAll(Sort sort);
 
-    Page<T> findAll(Pageable page);
+    Page<dto> findAll(Pageable page);
 
-    T save(T dto);
+    dto save(dto dto);
 
-    List<T> saveAll(List<T> dto);
+    List<dto> saveAll(List<dto> dto);
 
-    T update(T dto);
+    dto update(dto dto);
 
-    List<T> updateAll(List<T> listDto);
+    List<dto> updateAll(List<dto> listDto);
 
     void deleteById(Long id);
 

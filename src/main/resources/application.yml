@@ -37,8 +37,7 @@ spring:
 
 logging:
   level:
-    com.example.currencyexchange: INFO
+    com.example.basebackend: INFO
     org.hibernate: INFO
-    liquibase: INFO
 #  file.path: D:/logs
 #  file.name: ${logging.file.path}/base.log
