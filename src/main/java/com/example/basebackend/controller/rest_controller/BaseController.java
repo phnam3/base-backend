@@ -149,7 +149,11 @@ public abstract class BaseController<T extends BaseDto> {
         getLogger().info("Params: page={}, size={}",page,size);
         PageRequest pageRequest = null;
         if(page != null && size != null){
-            pageRequest = PageRequest.of(page,size,sort);
+            if(sort != null) {
+                pageRequest = PageRequest.of(page, size, sort);
+            } else {
+                pageRequest = PageRequest.of(page,size);
+            }
             getLogger().info("PageRequest: {}", pageRequest);
         }
         return pageRequest;
