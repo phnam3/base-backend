@@ -21,8 +21,4 @@ public class TestController extends BaseController<TestDto> {
         this.testService = testService;
     }
 
-    @Override
-    protected Logger getLogger() {
-        return log;
-    }
 }

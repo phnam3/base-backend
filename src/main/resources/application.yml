@@ -2,9 +2,8 @@ server:
   port: 8080
   error:
     include-message: always
-
 spring:
-#  liquibase:
+  #  liquibase:
 #    change-log: classpath:db/changelog/changelog-master.xml
 #    liquibase-schema: base
 #    default-schema: base

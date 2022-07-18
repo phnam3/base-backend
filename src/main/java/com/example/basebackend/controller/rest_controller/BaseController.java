@@ -30,93 +30,77 @@ public abstract class BaseController<T extends BaseDto> {
         this.baseService = baseService;
     }
 
-    protected abstract Logger getLogger();
 
     @GetMapping(value = "/count")
     public final ResponseEntity<?> count(){
         Long result = baseService.count();
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @GetMapping(value = "/getOne")
     public final ResponseEntity<?> getOne(@RequestParam(value = "id") Long id){
-        getLogger().info("Param id: {}", id);
         T result = baseService.getOne(id);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @GetMapping(value = "/existsById")
     public final ResponseEntity<?> existsById(Long id){
-        getLogger().info("Param id: {}", id);
         boolean result = baseService.existsById(id);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @GetMapping(value = "/findById")
     public final ResponseEntity<?> findById(@RequestParam(value = "id") Long id){
-        getLogger().info("Param id: {}", id);
         T result = baseService.findById(id).orElseThrow(
                 () -> DataAccessException.notFound("Id Not Found")
         );
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @GetMapping(value = "/findAll")
     public final ResponseEntity<?> findAll(@PageableDefault Pageable pageable){
         Iterable<T> result = baseService.findAll(pageable);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @PostMapping(value = "/findAllById")
     public final ResponseEntity<?> findAllById(@RequestBody List<Long> ids){
         List<T> result = baseService.findAllById(ids);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @PostMapping(value = "/save")
     public final ResponseEntity<?> save(@RequestBody T dto){
         T result = baseService.save(dto);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @PostMapping(value = "/saveAll")
     public final ResponseEntity<?> saveAll(@RequestBody List<T> dtos){
         List<T> result = baseService.saveAll(dtos);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @PostMapping(value = "/update")
     public final ResponseEntity<?> update(@RequestBody T dto){
         T result = baseService.update(dto);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @PostMapping(value = "/updateAll")
     public final ResponseEntity<?> updateAll(@RequestBody List<T> dtos){
         List<T> result = baseService.updateAll(dtos);
-        getLogger().info("Result: {}", result);
         return BaseResponseDto.builder().httpStatus(HttpStatus.OK).data(result).build().toResponseEntity();
     }
 
     @GetMapping(value = "/deleteById")
     public final ResponseEntity<?> deleteById(Long id){
-        getLogger().info("Param id={}", id);
         baseService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value = "/deleteAll")
     public final ResponseEntity<?> deleteAll(@RequestBody List<Long> ids){
-        getLogger().info("Param id={}", ids);
         baseService.deleteAll(ids);
         return ResponseEntity.noContent().build();
     }
