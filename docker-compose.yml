@@ -1,0 +1,8 @@
+services:
+  base-backend:
+    image: my-first-docker:v1.0.0
+    container_name: base-backend
+    build: .
+    ports:
+      - 8000:8080
+    command: ./mvnw spring-boot:run
