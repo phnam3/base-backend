@@ -8,6 +8,7 @@ class BaseBackendApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("TEST FOR JENKINS");
     }
 
 }
