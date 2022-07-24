@@ -5,4 +5,4 @@ services:
     build: .
     ports:
       - 8000:8080
-    command: ./mvnw spring-boot:run
+#    command: ./mvnw spring-boot:run
