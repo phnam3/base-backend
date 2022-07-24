@@ -4,5 +4,5 @@ services:
     container_name: base-backend
     build: .
     ports:
-      - 8000:8080
+      - 8000:8084
 #    command: ./mvnw spring-boot:run

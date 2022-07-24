@@ -32,5 +32,13 @@ pipeline {
                 }
             }
         }
+        stage('Run Docker Image') {
+            steps {
+                script {
+                    sh 'docker pull phnam3/my-first-docker:v1.0.0'
+                    sh 'docker compose up -d base-backend'
+                }
+            }
+        }
     }
 }
