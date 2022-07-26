@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment {
+          DOCKER_IMAGE_NAME  = 'phnam3/my-first-docker'
+          IMAGE_TAG          = 'v1.0.0'
+          CONTAINER_NAME     = 'base-backend'
+    }
     tools {
         maven 'Maven'
     }
@@ -11,14 +16,19 @@ pipeline {
         }
         stage('Build Maven') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean install -DskipTests'
+            }
+        }
+        stage('Clean Docker Repository') {
+            steps {
+                sh 'docker rm -f $CONTAINER_NAME'
+                sh 'docker rmi -f $DOCKER_IMAGE_NAME:$IMAGE_TAG'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker-compose build base-backend'
-                    sh 'docker tag my-first-docker:v1.0.0 phnam3/my-first-docker:v1.0.0'
+                    sh 'docker-compose build $CONTAINER_NAME'
                 }
             }
         }
@@ -27,16 +37,15 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
                         sh 'docker login -u phnam3 -p ${dockerhubpwd}'
-                        sh 'docker push phnam3/my-first-docker:v1.0.0'
                     }
+                    sh 'docker push $DOCKER_IMAGE_NAME:$IMAGE_TAG'
                 }
             }
         }
         stage('Run Docker Image') {
-            steps {
+            steps{
                 script {
-                    sh 'docker pull phnam3/my-first-docker:v1.0.0'
-                    sh 'docker compose up -d base-backend'
+                    sh "docker-compose up -d $CONTAINER_NAME"
                 }
             }
         }
