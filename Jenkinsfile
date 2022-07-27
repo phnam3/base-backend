@@ -28,6 +28,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd2')]) {
+                        sh 'docker login -u phnam3 -p ${dockerhubpwd2}'
+                    }
                     sh 'docker-compose build $CONTAINER_NAME'
                 }
             }
@@ -35,9 +38,6 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
-                        sh 'docker login -u phnam3 -p ${dockerhubpwd}'
-                    }
                     sh 'docker push $DOCKER_IMAGE_NAME:$IMAGE_TAG'
                 }
             }

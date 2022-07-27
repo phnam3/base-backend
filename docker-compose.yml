@@ -2,6 +2,7 @@ services:
   base-backend:
     image: phnam3/my-first-docker:v1.0.0
     container_name: base-backend
+    restart: always
     build: .
     ports:
       - 8000:8084
