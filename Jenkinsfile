@@ -19,18 +19,16 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
-        stage('Clean Docker Repository') {
+        stage('Login To Docker') {
             steps {
-                sh 'docker rm -f $CONTAINER_NAME'
-                sh 'docker rmi -f $DOCKER_IMAGE_NAME:$IMAGE_TAG'
+                withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd2')]) {
+                    sh 'docker login -u phnam3 -p ${dockerhubpwd2}'
+                }
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd2')]) {
-                        sh 'docker login -u phnam3 -p ${dockerhubpwd2}'
-                    }
                     sh 'docker-compose build $CONTAINER_NAME'
                 }
             }
@@ -38,13 +36,14 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    sh 'docker push $DOCKER_IMAGE_NAME:$IMAGE_TAG'
+                    sh 'docker-compose push $CONTAINER_NAME'
                 }
             }
         }
         stage('Run Docker Image') {
             steps{
                 script {
+                    sh "docker-compose down"
                     sh "docker-compose up -d $CONTAINER_NAME"
                 }
             }
