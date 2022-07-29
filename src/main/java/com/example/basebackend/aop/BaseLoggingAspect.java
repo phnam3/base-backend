@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Slf4j
 public class BaseLoggingAspect {
     /**
-     * Pointcut that matches all functionalities inside ser
+     * Pointcut that matches all functionalities inside service and repository
      */
     @Pointcut("within(com.example.basebackend.service..*)" +
             " || within(com.example.basebackend.repository..*)")
