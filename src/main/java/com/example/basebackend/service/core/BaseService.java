@@ -17,11 +17,7 @@ public interface BaseService<dto extends BaseDto> {
 
     Optional<dto> findById(Long id);
 
-    List<dto> findAll();
-
     List<dto> findAllById(List<Long> id);
-
-    List<dto> findAll(Sort sort);
 
     Page<dto> findAll(Pageable page);
 

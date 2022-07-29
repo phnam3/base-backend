@@ -1,21 +1,20 @@
 package com.example.basebackend.service;
 
 import com.example.basebackend.dto.BaseDto;
+import com.example.basebackend.dto.TestDto;
 import com.example.basebackend.entities.BaseEntity;
+import com.example.basebackend.entities.TestEntity;
 import com.example.basebackend.exceptions.DataAccessException;
+import com.example.basebackend.mapper.BaseMapper;
 import com.example.basebackend.repository.BaseRepository;
 import com.example.basebackend.service.core.BaseService;
 import org.slf4j.Logger;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public abstract class BaseServiceImpl<T extends BaseEntity, dto extends BaseDto> implements BaseService<dto> {
 
@@ -29,13 +28,14 @@ public abstract class BaseServiceImpl<T extends BaseEntity, dto extends BaseDto>
 
     protected abstract T createEntity(dto dto);
 
+    protected abstract List<T> createEntityList(List<dto> dtos);
+
     protected abstract T createEntity(Long id);
 
     protected abstract dto createDto(T entity);
 
-    protected void copyPojo(Object source, Object target) {
-        BeanUtils.copyProperties(source, target);
-    }
+    protected abstract List<dto> createDtoList(List<T> entity);
+
 
     @Override
     public Long count() {
@@ -61,18 +61,6 @@ public abstract class BaseServiceImpl<T extends BaseEntity, dto extends BaseDto>
     }
 
     @Override
-    public List<dto> findAll() {
-        List<dto> result = baseRepository.findAll().stream().map(this::createDto).collect(Collectors.toList());
-        return result;
-    }
-
-    @Override
-    public List<dto> findAll(Sort sort) {
-        List<dto> result = baseRepository.findAll(sort).stream().map(this::createDto).collect(Collectors.toList());
-        return result;
-    }
-
-    @Override
     public Page<dto> findAll(Pageable page) {
         Page<dto> result = baseRepository.findAll(page).map(this::createDto);
         return result;
@@ -80,7 +68,8 @@ public abstract class BaseServiceImpl<T extends BaseEntity, dto extends BaseDto>
 
     @Override
     public List findAllById(List<Long> ids) {
-        List<dto> result = baseRepository.findAllById(ids).stream().map(this::createDto).collect(Collectors.toList());
+//        List<dto> result = baseRepository.findAllById(ids).stream().map(this::createDto).collect(Collectors.toList());
+        List<dto> result = createDtoList(baseRepository.findAllById(ids));
         return result;
     }
 
@@ -93,8 +82,9 @@ public abstract class BaseServiceImpl<T extends BaseEntity, dto extends BaseDto>
     }
 
     @Override
-    public List<dto> saveAll(List<dto> dto) {
-        List<dto> result = baseRepository.saveAll(StreamSupport.stream(dto.spliterator(), false).map(this::createEntity).collect(Collectors.toList())).stream().map(this::createDto).collect(Collectors.toList());
+    public List<dto> saveAll(List<dto> dtos) {
+//        List<dto> result = baseRepository.saveAll(StreamSupport.stream(dtos.spliterator(), false).map(this::createEntity).collect(Collectors.toList())).stream().map(this::createDto).collect(Collectors.toList());
+        List<dto> result = createDtoList(baseRepository.saveAll(createEntityList(dtos)));
         return result;
     }
 
@@ -110,7 +100,8 @@ public abstract class BaseServiceImpl<T extends BaseEntity, dto extends BaseDto>
     @Override
     public List<dto> updateAll(List<dto> dtos) {
         checkExists(dtos);
-        List<dto> result = baseRepository.saveAll(StreamSupport.stream(dtos.spliterator(), false).map(this::createEntity).collect(Collectors.toList())).stream().map(this::createDto).collect(Collectors.toList());
+//        List<dto> result = baseRepository.saveAll(StreamSupport.stream(dtos.spliterator(), false).map(this::createEntity).collect(Collectors.toList())).stream().map(this::createDto).collect(Collectors.toList());
+        List<dto> result = createDtoList(baseRepository.saveAll(createEntityList(dtos)));
         return result;
     }
 
@@ -152,4 +143,5 @@ public abstract class BaseServiceImpl<T extends BaseEntity, dto extends BaseDto>
             throw DataAccessException.notFound("One or more elements are missing", errors);
         }
     }
+
 }

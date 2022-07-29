@@ -104,4 +104,10 @@ public abstract class BaseController<T extends BaseDto> {
         baseService.deleteAll(ids);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping(value = "/deleteAllEntities")
+    public final ResponseEntity<?> deleteAll(){
+        baseService.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
 }
